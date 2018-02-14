@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+	<title>SB/MB Fast entry</title>
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.19.1/vis.min.css"/>
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
+	<link rel="stylesheet" type="text/css" href="css/style.css" />
+
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.19.1/vis.min.js"></script>
+
+	<!-- polyfills for IE -->
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.3/fetch.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/es6-shim/0.35.3/es6-shim.min.js"></script>
+
+	<script type="text/javascript" src="js/fetcher.js"></script>
+	<script type="text/javascript" src="js/ntparser.js"></script>
+	<script type="text/javascript" src="js/suggester.js"></script>
+	<meta charset="UTF-8">
+</head>
+<body>
+<main>
+<section>
+<h3>SB/MB suggestions demo</h3>
+	<section>
+	<h4>Enter a short code</h4>
+	<p>Enter abbreviation + date, e.g. "Wet 15/02/2017" </p>
+	<p>Abbreviations (NL): Wet, Decr, Ord, KB, MB</p>
+	<p>Abbreviations (FR): Loi, Decr, Ord, AR, AM</p>
+	<section>
+	<select id="selected" multiple="multiple" readonly="readonly">
+	</select>
+	<div>
+	<input id="code" size="60" onInput="getTriples();"/>
+	<br/>
+	<select id="suggest" multiple="multiple" onChange="moveSelected();"/>
+	</select>
+	</div>
+	</section>
+	</section>
+<script>
+
+const suggester = new Suggester();
+const fetcher = new Fetcher();
+const elCode = document.getElementById("code");
+const elList = document.getElementById("suggest");
+const elSels = document.getElementById("selected");
+
+/**
+ * Clear select list
+ */
+function cleanList() {
+	while (elList.firstChild) {
+		elList.removeChild(elList.firstChild);
+	}
+}
+
+/**
+ * Move selected to new list
+ */
+function moveSelected() {
+	var i = elList.selectedIndex;
+	var opt = elList.options[i];
+	elSels.appendChild(opt);
+}
+
+/**
+ * Build select list with data from list
+ */
+function buildList(options) {
+	for (let k in options) {
+		var opt = document.createElement('option');
+		opt.textContent = options[k];
+		opt.setAttribute('value', k);
+		elList.appendChild(opt);
+	}
+}
+
+/**
+ * Get list of triples from store
+ */
+function getTriples() {
+	var url = suggester.buildUrl(elCode.value);
+	cleanList();
+	if (url) {
+		var data = fetcher.getTriples(url);
+		suggester.parse(data).then(function(res) {
+			buildList(res);
+		});
+	}
+}
+</script>
+</main>
+<footer>
+&copy; 2018 FOD BOSA DG DT
+</footer>   
+</body>
+</html>
