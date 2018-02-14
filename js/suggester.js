@@ -1,6 +1,6 @@
 function Suggester() {
 	this.base = "https://id.belgium.be/_query/eli/filter-by-docdate";
-	this.pattern = /(wet|loi|decr|kb|ar|mb|am)\s*([0-3]?\d)[/-]?((0|1)?\d)[/-]?((18|19|20)?\d\d)\s+/;
+	this.pattern = /(wet|loi|decr|kb|ar|mb|am)\s*([0-3]?\d)[/-]?((0|1)?\d)[/-]?((18|19|20)\d\d)/;
 	this.mapping = { "wet": "LAW", "loi": "LAW",
 			"decr": "DECREE", "ord": "ORD",
 			"kb": "DECISION", "ar": "DECISION",
