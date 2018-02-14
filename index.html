@@ -23,7 +23,7 @@
 <h3>SB/MB suggestions demo</h3>
 	<section>
 	<h4>Enter a short code</h4>
-	<p>Enter abbreviation + date, e.g. "Wet 15/02/2017" </p>
+	<p>Enter abbreviation + date, e.g. "Decr 14/12/1992" </p>
 	<p>Abbreviations (NL): Wet, Decr, Ord, KB, MB</p>
 	<p>Abbreviations (FR): Loi, Decr, Ord, AR, AM</p>
 	<section>
@@ -69,8 +69,10 @@ function moveSelected() {
 function buildList(options) {
 	for (let k in options) {
 		var opt = document.createElement('option');
-		opt.textContent = options[k];
-		opt.setAttribute('value', k);
+		var txt = fetcher.getParser().splitLiteral(options[k])[1];
+		opt.textContent = txt;
+		var attr = k.replace("/justel", "");
+		opt.setAttribute('value', attr);
 		elList.appendChild(opt);
 	}
 }
